@@ -1,0 +1,48 @@
+{
+    "compilerOptions": {
+        /* ----------------------------------------------------
+         * ✨ Target & Environment
+         * ---------------------------------------------------- */
+        "target": "ESNext",
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+
+        /* ----------------------------------------------------
+         * 📦 Compatibility & Interop
+         * ---------------------------------------------------- */
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "verbatimModuleSyntax": false,
+
+        /* ----------------------------------------------------
+         * 🧩 React & JSX
+         * ---------------------------------------------------- */
+        "jsx": "react-jsx",
+
+        /* ----------------------------------------------------
+         * 🧠 Type Checking & Safety
+         * ---------------------------------------------------- */
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+
+        /* ----------------------------------------------------
+         * 📁 File structure
+         * ---------------------------------------------------- */
+        "noEmit": true,
+
+        /* ----------------------------------------------------
+         * 💡 Optional Developer Settings
+         * ---------------------------------------------------- */
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["resources/ts/*"]
+        }
+    },
+    "include": ["resources/**/*", "resources/ts/vite-env.d.ts"]
+}
