@@ -28,7 +28,8 @@ return new class extends Migration
             $table->timestamp('borrowed_at')->useCurrent();
 
             // Batas pengembalian
-            $table->timestamp('due_date');
+            $table->timestamp('due_date')->nullable();
+
 
             // Tanggal dikembalikan
             $table->timestamp('returned_at')->nullable();
