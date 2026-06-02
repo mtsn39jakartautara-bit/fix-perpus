@@ -17,8 +17,11 @@ module.exports = {
             },
             borderRadius: {
                 lg: "var(--radius)",
-                md: "calc(var(--radius) - 2px)",
-                sm: "calc(var(--radius) - 4px)",
+                md: "calc(var(--radius) - 4px)",
+                sm: "calc(var(--radius) - 8px)",
+                xl: "calc(var(--radius) + 8px)",
+                "2xl": "calc(var(--radius) + 16px)",
+                "3xl": "calc(var(--radius) + 24px)",
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -26,11 +29,15 @@ module.exports = {
                 ring: "hsl(var(--ring))",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
-                "hmi-green": {
-                    DEFAULT: "#009000",
-                    dark: "hsl(var(--hmi-green-dark))",
-                    light: "hsl(var(--hmi-green-light))",
-                },
+
+                // Custom colors dari design system
+                "primary-soft": "hsl(var(--primary-soft))",
+                "primary-glow": "hsl(var(--primary-glow))",
+                sky: "hsl(var(--sky))",
+                mint: "hsl(var(--mint))",
+                peach: "hsl(var(--peach))",
+                lavender: "hsl(var(--lavender))",
+
                 primary: {
                     DEFAULT: "hsl(var(--primary))",
                     foreground: "hsl(var(--primary-foreground))",
@@ -59,19 +66,13 @@ module.exports = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                sidebar: {
-                    DEFAULT: "hsl(var(--sidebar-background))",
-                    foreground: "hsl(var(--sidebar-foreground))",
-                    primary: "hsl(var(--sidebar-primary))",
-                    "primary-foreground":
-                        "hsl(var(--sidebar-primary-foreground))",
-                    accent: "hsl(var(--sidebar-accent))",
-                    "accent-foreground":
-                        "hsl(var(--sidebar-accent-foreground))",
-                    border: "hsl(var(--sidebar-border))",
-                    ring: "hsl(var(--sidebar-ring))",
-                },
             },
+            boxShadow: {
+                soft: "var(--shadow-soft)",
+                card: "var(--shadow-card)",
+                float: "var(--shadow-float)",
+            },
+
             keyframes: {
                 "accordion-down": {
                     from: {
@@ -89,10 +90,21 @@ module.exports = {
                         height: "0",
                     },
                 },
+                float: {
+                    "0%, 100%": { transform: "translateY(0)" },
+                    "50%": { transform: "translateY(-8px)" },
+                },
+                blob: {
+                    "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+                    "33%": { transform: "translate(20px, -30px) scale(1.1)" },
+                    "66%": { transform: "translate(-20px, 20px) scale(0.95)" },
+                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+                float: "float 4s ease-in-out infinite",
+                blob: "blob 12s ease-in-out infinite",
             },
         },
     },

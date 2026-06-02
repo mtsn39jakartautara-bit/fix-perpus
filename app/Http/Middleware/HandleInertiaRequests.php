@@ -24,7 +24,7 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
-     * Define the props that are shared by default.
+     * Define the props that are shared by default.d
      *
      * @return array<string, mixed>
      */
@@ -39,6 +39,12 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
+                'book_item' => fn() => $request->session()->get('book_item'),
+                'user' => fn() => session('user'),
+            ],
         ]);
     }
 }

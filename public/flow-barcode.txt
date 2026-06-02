@@ -1,0 +1,75 @@
+================
+Peminjaman
+================
+
+
+- mengecek barcode book_list jika ada barcodenya, maka akan dipinjam
+
+scan user
+    ↓
+Scan book item
+    ↓
+create borrowing : status jadi borrowed
+    ↓
+create point history
+
+
+================================
+Kunjungan Offline : Self Scan
+================================
+
+- mengecek barcode library_check_points : ini table untuk menyimpan barcode kunjungan perpus
+- akan ada pengecekan apakah barcodenya sudah seusai?
+
+User login di HP : sudah tahu siapa usernya
+    ↓
+User scan barcode perpus (library_check_points)
+    ↓
+System validasi :
+$scanPoint = ScanPoint::where('barcode', $barcode)->first();
+    ↓
+Kalau valid:
+Visit::create([
+    'user_id' => auth()->id(),
+    'type' => 'offline',
+]);
+    ↓
+Tambah point:
+
+
+        $currentPeriod = PointPeriods::where(
+            'is_active',
+            true
+        )->firstOrFail();
+
+
+PointHistory::create([
+    'user_id' => auth()->id(),
+    'point_period_id' => $currentPeriod->id,
+    'type' => 'visit_offline',
+    'points' => 5,
+]);
+
+================================
+Kunjungan Offline : Admin Scan
+================================
+
+User login
+    ↓
+User membuka barcode
+    ↓
+Admin Scan
+    ↓
+Visit::create([
+    'user_id' => auth()->id(),
+    'type' => 'offline',
+]);
+    ↓
+Tambah point:
+PointHistory::create([
+    'user_id' => auth()->id(),
+    'point_period_id' => $currentPeriod->id,
+    'type' => 'visit_offline',
+    'points' => 5,
+]);
+
