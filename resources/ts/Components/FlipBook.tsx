@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import HTMLFlipBook from "react-pageflip";
 import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+// import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import {
     ChevronLeft,
     ChevronRight,
@@ -23,8 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
-
+pdfjsLib.GlobalWorkerOptions.workerSrc = "/package/pdf.worker.js";
 interface FlipBookProps {
     pdfUrl: string;
     bookTitle: string;
