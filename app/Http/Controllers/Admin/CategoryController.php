@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,7 +31,7 @@ class CategoryController extends Controller
             ->appends($request->query());
 
         return Inertia::render('Admin/Categories/Index', [
-            'categories' => $categories,
+            'categories' => CategoryResource::collection($categories),
             'filters' => [
                 'search' => $request->get('search', ''),
                 'sort' => $sort,

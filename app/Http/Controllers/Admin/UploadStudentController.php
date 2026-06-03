@@ -196,6 +196,15 @@ class UploadStudentController extends Controller
     public function getClasses()
     {
         $classes = ClassRoom::withCount('enrollments')->orderBy('level')->orderBy('name')->get();
+
+        // 👇 CASTING MANUAL untuk semua classes
+        $classes->transform(function ($class) {
+            $class->id = (int) $class->id;
+            $class->level = (int) $class->level;
+            $class->enrollments_count = (int) ($class->enrollments_count ?? 0);
+            return $class;
+        });
+
         return response()->json($classes);
     }
 

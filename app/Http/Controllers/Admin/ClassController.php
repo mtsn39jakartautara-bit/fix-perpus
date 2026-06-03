@@ -48,18 +48,31 @@ class ClassController extends Controller
 
         $classes = $query->paginate(12)->withQueryString();
 
-        // Get student count for each class
+        // Get student count for each class & CASTING MANUAL
         $activeAcademicYear = AcademicYears::where('is_active', true)->first();
         if ($activeAcademicYear) {
             foreach ($classes as $class) {
                 $class->students_count = Enrollments::where('class_id', $class->id)
                     ->where('academic_year_id', $activeAcademicYear->id)
                     ->count();
+
+                // 👇 CASTING MANUAL untuk students_count
+                $class->students_count = (int) $class->students_count;
             }
         }
 
-        // Get available levels
+        // 👇 CASTING MANUAL untuk semua classes
+        foreach ($classes as $class) {
+            $class->id = (int) $class->id;
+            $class->level = (int) $class->level;
+            $class->enrollments_count = (int) ($class->enrollments_count ?? 0);
+        }
+
+        // Get available levels (sudah integer dari pluck, tapi amankan)
         $levels = ClassRoom::select('level')->distinct()->orderBy('level')->pluck('level');
+        $levels = $levels->map(function ($level) {
+            return (int) $level;
+        });
 
         return Inertia::render('Admin/Classes/Index', [
             'classes' => $classes,

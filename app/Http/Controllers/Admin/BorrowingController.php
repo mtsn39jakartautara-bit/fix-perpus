@@ -177,6 +177,10 @@ class BorrowingController extends Controller
             ->get()
             ->map(function ($user) use ($maxBorrowLimit) {
 
+                // 👇 CASTING MANUAL untuk withCount & withExists
+                $user->current_borrowings_count = (int) $user->current_borrowings_count;
+                $user->has_late_borrowings = (bool) $user->has_late_borrowings;
+
                 $currentClass = null;
 
                 if ($user->student) {
@@ -185,7 +189,7 @@ class BorrowingController extends Controller
                 }
 
                 return [
-                    'id' => $user->id,
+                    'id' => (int) $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
                     'role' => $user->role,
@@ -197,10 +201,10 @@ class BorrowingController extends Controller
                     'class' => $currentClass,
 
                     'barcode' => $user->barcode,
-                    'total_points' => $user->total_points,
+                    'total_points' => (int) $user->total_points, // 👈 Tambah cast total_points
 
-                    'has_late_borrowings' => (bool) $user->has_late_borrowings,
-                    'current_borrowings_count' => $user->current_borrowings_count,
+                    'has_late_borrowings' => $user->has_late_borrowings, // Sudah bool dari casting di atas
+                    'current_borrowings_count' => $user->current_borrowings_count, // Sudah int dari casting di atas
 
                     'max_borrow_limit' => $maxBorrowLimit,
                     'remaining_quota' => max(
@@ -212,19 +216,19 @@ class BorrowingController extends Controller
                     // Buku yang sedang dipinjam
                     'borrowed_books' => $user->borrowings->map(function ($borrowing) {
                         return [
-                            'id' => $borrowing->id,
+                            'id' => (int) $borrowing->id,
                             'borrowed_at' => $borrowing->borrowed_at,
                             'due_date' => $borrowing->due_date,
                             'status' => $borrowing->status,
 
                             'book_item' => [
-                                'id' => $borrowing->bookItem?->id,
+                                'id' => (int) $borrowing->bookItem?->id,
                                 'barcode' => $borrowing->bookItem?->barcode,
                                 'condition' => $borrowing->bookItem?->condition,
                             ],
 
                             'book' => [
-                                'id' => $borrowing->bookItem?->physicalBook?->id,
+                                'id' => (int) $borrowing->bookItem?->physicalBook?->id,
                                 'title' => $borrowing->bookItem?->physicalBook?->title,
                                 'author' => $borrowing->bookItem?->physicalBook?->author,
                                 'publisher' => $borrowing->bookItem?->physicalBook?->publisher,
@@ -239,7 +243,6 @@ class BorrowingController extends Controller
             'users' => $users
         ]);
     }
-
     /**
      * Cari book item berdasarkan barcode
      */
