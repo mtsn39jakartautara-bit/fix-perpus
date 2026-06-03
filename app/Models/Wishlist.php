@@ -10,17 +10,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Wishlist extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'book_id' => 'integer',
+        'priority' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     protected $fillable = [
         'user_id',
         'book_id',
         'notes',
         'priority',
     ];
-    protected $casts = [
-        'priority' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+
 
     public function user(): BelongsTo
     {

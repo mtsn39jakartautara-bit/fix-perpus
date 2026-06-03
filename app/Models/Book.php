@@ -9,6 +9,12 @@ use Illuminate\Support\Str;
 class Book extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'id' => 'integer',
+        'publish_year' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     protected $fillable = [
         'title',
         'publisher',

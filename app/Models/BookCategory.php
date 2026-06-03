@@ -9,7 +9,15 @@ class BookCategory extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',
+        'book_id' => 'integer',
+        'category_id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     protected $table = 'book_category';
+
 
     protected $fillable = [
         'book_id',

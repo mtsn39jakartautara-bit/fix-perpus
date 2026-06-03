@@ -10,6 +10,13 @@ class ClassRoom extends Model
     use HasFactory;
     protected $table = 'classes';
 
+    protected $casts = [
+        'id' => 'integer',
+        'level' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'name',
         'level',

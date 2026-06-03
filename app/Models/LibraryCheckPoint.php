@@ -9,6 +9,11 @@ class LibraryCheckPoint extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     protected $fillable = [
         'name',
         'barcode',

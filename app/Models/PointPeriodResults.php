@@ -9,6 +9,16 @@ class PointPeriodResults extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',
+        'point_period_id' => 'integer',
+        'user_id' => 'integer',
+        'final_points' => 'integer',
+        'rank' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'point_period_id',
         'user_id',

@@ -16,7 +16,10 @@ class Announcement extends Model
         'is_active',
     ];
     protected $casts = [
+        'id' => 'integer',
         'date' => 'date',
         'is_active' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }

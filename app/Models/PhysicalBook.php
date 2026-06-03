@@ -9,6 +9,14 @@ class PhysicalBook extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',
+        'publish_year' => 'integer',
+        'stock' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'title',
         'isbn',

@@ -9,6 +9,11 @@ class BookItem extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',
+        'physical_book_id' => 'integer',
+    ];
+
     protected $fillable = [
         'barcode',
         'physical_book_id',

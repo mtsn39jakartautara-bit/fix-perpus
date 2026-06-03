@@ -9,6 +9,15 @@ class PointPeriods extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer',
+        'is_active' => 'boolean',
+        'started_at' => 'datetime',
+        'ended_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     protected $fillable = [
         'name',
         'description',
@@ -18,11 +27,7 @@ class PointPeriods extends Model
         'created_by',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'started_at' => 'datetime',
-        'ended_at' => 'datetime',
-    ];
+
 
     public function creator()
     {
