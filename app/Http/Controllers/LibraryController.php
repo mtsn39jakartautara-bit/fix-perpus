@@ -95,7 +95,7 @@ class LibraryController extends Controller
                 'publish_year' => $book->publish_year,
                 'abstract' => $book->abstract,
                 'categories' => $book->categories,
-                'pdf_url' => '/storage/books/pdfs/' . $book->pdf_file,
+                'pdf_url' => '/storage/' . $book->pdf_file,
                 'is_wishlisted' => $isWishlisted,
                 'wishlist_id' => $wishlistId, // Kirim wishlist_id ke frontend
             ],
