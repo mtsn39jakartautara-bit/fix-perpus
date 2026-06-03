@@ -8,28 +8,17 @@ import { useForm } from "@inertiajs/react";
 
 export default function Welcome(props: any) {
     const { data, setData, post, processing, errors } = useForm({
-        username: "",
+        identifier: "", // Changed from "username" to "identifier"
         password: "",
     });
 
-    const [showDemo, setShowDemo] = useState(false);
-
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        post(route("login.attempt"));
+        post(route("login")); // Changed from "login.attempt" to "login" (standard Laravel route)
     };
 
     // Demo login untuk development (opsional)
-    const handleDemoLogin = () => {
-        setData({
-            username: "2024001",
-            password: "password123",
-        });
-        setShowDemo(true);
-        setTimeout(() => {
-            post(route("login.attempt"));
-        }, 100);
-    };
+
     return (
         <>
             <Head title="E-Perpustakaan MTSN 39 Jakarta Utara" />
@@ -53,28 +42,37 @@ export default function Welcome(props: any) {
                         >
                             <div className="relative">
                                 <div className="absolute inset-0 rounded-[3rem] bg-white/10 blur-2xl" />
+
                                 <div className="relative grid h-72 w-72 place-items-center rounded-[3rem] bg-white/15 backdrop-blur-xl shadow-float animate-float">
-                                    <GraduationCap
-                                        className="h-32 w-32 text-white"
-                                        strokeWidth={1.5}
+                                    {/* LOGO UTAMA */}
+                                    <img
+                                        src="/assets/images/logo.webp"
+                                        alt="Logo Perpustakaan"
+                                        className="h-32 w-32 object-contain drop-shadow-lg"
                                     />
+
+                                    {/* Floating icon 1 */}
                                     <div className="absolute -right-6 -top-6 grid h-20 w-20 place-items-center rounded-3xl bg-white/90 text-primary shadow-card">
                                         <BookOpen className="h-9 w-9" />
                                     </div>
+
+                                    {/* Floating icon 2 */}
                                     <div className="absolute -bottom-4 -left-6 grid h-16 w-16 place-items-center rounded-2xl bg-mint text-primary shadow-card">
                                         <Sparkles className="h-7 w-7" />
                                     </div>
                                 </div>
                             </div>
+
                             <h2 className="mt-10 text-3xl font-bold tracking-tight">
-                                Belajar jadi seru!
+                                Perpustakaan Digital MTsN 39 Jakarta
                             </h2>
+
                             <p className="mt-2 max-w-sm text-white/80">
-                                Kelola tugas, absensi, dan poin prestasimu di
-                                satu tempat yang menyenangkan.
+                                Kelola buku, peminjaman, dan aktivitas
+                                perpustakaan dalam satu sistem modern dan mudah
+                                digunakan.
                             </p>
                         </motion.div>
-
                         {/* Card */}
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
@@ -83,15 +81,20 @@ export default function Welcome(props: any) {
                             className="mx-auto w-full max-w-md rounded-[2rem] bg-card p-8 shadow-float lg:p-10"
                         >
                             <div className="mb-8 flex items-center gap-3">
-                                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-soft">
-                                    <GraduationCap className="h-6 w-6" />
+                                <div>
+                                    <img
+                                        src="/assets/images/logo.webp"
+                                        alt="Logo Perpustakaan"
+                                        className="h-10 w-h-10 object-contain"
+                                    />
                                 </div>
+
                                 <div>
                                     <h1 className="text-xl font-bold tracking-tight">
-                                        MTsN 39 Jakarta
+                                        Perpustakaan MTsN 39 Jakarta
                                     </h1>
                                     <p className="text-xs text-muted-foreground">
-                                        Selamat datang kembali
+                                        Asy-Syifa Binti Abdillah
                                     </p>
                                 </div>
                             </div>
@@ -100,13 +103,13 @@ export default function Welcome(props: any) {
                                 Masuk ke akunmu
                             </h2>
                             <p className="mt-1.5 text-sm text-muted-foreground">
-                                Gunakan akun NIS atau email sekolahmu.
+                                Gunakan Email / NISN / NIP / NIK
                             </p>
 
                             {/* Error message */}
-                            {errors.username && (
+                            {errors.identifier && (
                                 <div className="mt-4 rounded-2xl bg-destructive/10 p-3 text-sm text-destructive">
-                                    {errors.username}
+                                    {errors.identifier}
                                 </div>
                             )}
 
@@ -116,20 +119,23 @@ export default function Welcome(props: any) {
                             >
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">
-                                        NIS / Email
+                                        Email / NISN / NIP / NIK
                                     </label>
                                     <Input
-                                        placeholder="2024001 atau nama@smp.id"
+                                        placeholder="Contoh: 2024001, guru123, atau email@sekolah.sch.id"
                                         className="h-14 rounded-2xl border-0 bg-muted px-5 text-base focus-visible:ring-2 focus-visible:ring-primary"
-                                        value={data.username}
+                                        value={data.identifier}
                                         onChange={(e) =>
-                                            setData("username", e.target.value)
+                                            setData(
+                                                "identifier",
+                                                e.target.value
+                                            )
                                         }
                                         disabled={processing}
                                     />
-                                    {errors.username && (
+                                    {errors.identifier && (
                                         <p className="text-xs text-destructive">
-                                            {errors.username}
+                                            {errors.identifier}
                                         </p>
                                     )}
                                 </div>
@@ -166,18 +172,6 @@ export default function Welcome(props: any) {
                                         <ArrowRight className="ml-1 h-5 w-5 transition-transform group-hover:translate-x-1" />
                                     )}
                                 </Button>
-
-                                {/* Demo login button (opsional - untuk development) */}
-                                {/* <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="lg"
-                                    className="h-14 w-full rounded-2xl border-primary/20 text-base font-semibold hover:bg-primary-soft"
-                                    onClick={handleDemoLogin}
-                                    disabled={processing}
-                                >
-                                    Demo Login (NIS: 2024001)
-                                </Button> */}
 
                                 <p className="pt-2 text-center text-sm text-muted-foreground">
                                     Lupa kata sandi?{" "}

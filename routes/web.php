@@ -42,14 +42,13 @@ Route::post('/testing', [TestingController::class, 'test'])->name('testing');
 //----------------- test
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect('/login');
 });
 
+Route::get('/test-403', fn() => abort(403));
+Route::get('/test-404', fn() => abort(404));
+Route::get('/test-419', fn() => abort(419));
+Route::get('/test-500', fn() => abort(500));
 
 Route::middleware('auth')->group(function () {
 

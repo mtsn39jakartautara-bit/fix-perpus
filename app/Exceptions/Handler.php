@@ -4,8 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Inertia\Inertia;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class Handler extends ExceptionHandler
 {
@@ -31,24 +31,42 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render exception into an HTTP response.
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $exception)
     {
-        // $status = 500;
+        $status = $exception instanceof HttpExceptionInterface
+            ? $exception->getStatusCode()
+            : 500;
 
-        // if ($e instanceof HttpExceptionInterface) {
-        //     $status = $e->getStatusCode();
-        // }
+        if ($request->expectsJson()) {
+            return parent::render($request, $exception);
+        }
 
+        if (in_array($status, [403, 404, 419, 500])) {
+            return Inertia::render("Errors/{$status}", [
+                'status' => $status,
+                'message' => $exception->getMessage() ?: match ($status) {
+                    403 => 'Forbidden',
+                    404 => 'Not Found',
+                    419 => 'Page Expired',
+                    500 => 'Server Error',
+                    default => 'Error',
+                },
+            ])->toResponse($request)->setStatusCode($status);
+        }
 
-        // if (in_array($status, [403, 404, 500, 503])) {
+        return parent::render($request, $exception);
+    }
 
-        //     return Inertia::render("Errors/{$status}")
-        //         ->toResponse($request)
-        //         ->setStatusCode($status);
-        // }
-
-        return parent::render($request, $e);
+    /**
+     * Check if the request expects an Inertia response.
+     */
+    protected function isInertiaRequest($request): bool
+    {
+        return $request->header('X-Inertia') === 'true';
     }
 }

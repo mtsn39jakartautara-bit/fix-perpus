@@ -10,6 +10,7 @@ type TextInputProps = {
     required?: boolean;
     isFocused?: boolean;
     handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
 };
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
@@ -24,6 +25,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             required = false,
             isFocused = false,
             handleChange,
+            placeholder,
         },
         ref
     ) => {
@@ -48,6 +50,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                     autoComplete={autoComplete}
                     required={required}
                     onChange={handleChange}
+                    placeholder={placeholder}
                 />
             </div>
         );

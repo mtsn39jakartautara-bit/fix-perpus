@@ -9,24 +9,21 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { route } from "ziggy-js";
 import React from "react";
 
-// 🧩 Definisikan props untuk komponen
 type LoginProps = {
     status?: string;
     canResetPassword?: boolean;
 };
 
-// 🧩 Definisikan struktur form
 type LoginFormData = {
-    email: string;
+    identifier: string;
     password: string;
     remember: boolean;
 };
 
 export default function Login({ status, canResetPassword }: LoginProps) {
-    // ✅ Gunakan tipe generik agar TypeScript tahu struktur form
     const { data, setData, post, processing, errors, reset } =
         useForm<LoginFormData>({
-            email: "",
+            identifier: "",
             password: "",
             remember: false,
         });
@@ -39,7 +36,6 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     const onHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, type, checked, value } = event.target;
-        // ✅ name dipaksa jadi key dari LoginFormData agar tidak error
         setData(
             name as keyof LoginFormData,
             type === "checkbox" ? checked : value
@@ -63,20 +59,27 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel forInput="email" value="Email" />
+                    <InputLabel
+                        forInput="identifier"
+                        value="Email / NISN / NIP / NIK"
+                    />
 
                     <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
+                        id="identifier"
+                        type="text"
+                        name="identifier"
+                        value={data.identifier}
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
                         handleChange={onHandleChange}
+                        placeholder="Masukkan Email / NISN / NIP / NIK"
                     />
 
-                    <InputError message={errors.email ?? ""} className="mt-2" />
+                    <InputError
+                        message={errors.identifier ?? ""}
+                        className="mt-2"
+                    />
                 </div>
 
                 <div className="mt-4">

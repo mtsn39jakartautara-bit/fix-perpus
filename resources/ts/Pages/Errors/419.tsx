@@ -1,16 +1,16 @@
 import { Head, Link } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { AlertTriangle, ArrowLeft, Home, RefreshCw } from "lucide-react";
+import { Clock, ArrowLeft, Home, RefreshCw } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 
-export default function Error500() {
+export default function Error419() {
     const handleRefresh = () => {
         window.location.reload();
     };
 
     return (
         <>
-            <Head title="Kesalahan Server - 500" />
+            <Head title="Halaman Kadaluarsa - 419" />
 
             <main>
                 <div className="relative min-h-screen overflow-hidden bg-gradient-hero">
@@ -31,9 +31,9 @@ export default function Error500() {
                             {/* Icon */}
                             <div className="flex justify-center mb-6">
                                 <div className="relative">
-                                    <div className="absolute inset-0 rounded-full bg-red-500/20 blur-2xl animate-pulse" />
-                                    <div className="relative grid h-32 w-32 place-items-center rounded-full bg-gradient-to-br from-red-500 to-orange-500 shadow-soft">
-                                        <AlertTriangle
+                                    <div className="absolute inset-0 rounded-full bg-yellow-500/20 blur-2xl animate-pulse" />
+                                    <div className="relative grid h-32 w-32 place-items-center rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 shadow-soft">
+                                        <Clock
                                             className="h-16 w-16 text-white"
                                             strokeWidth={1.5}
                                         />
@@ -44,18 +44,55 @@ export default function Error500() {
                             {/* Error Code */}
                             <div className="text-center">
                                 <h1 className="text-8xl font-black tracking-tighter text-primary sm:text-9xl">
-                                    500
+                                    419
                                 </h1>
                                 <div className="mt-4 space-y-2">
                                     <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                                        Kesalahan Server
+                                        Halaman Kadaluarsa
                                     </h2>
                                     <p className="text-muted-foreground">
-                                        Maaf, terjadi kesalahan pada server
-                                        kami. Tim teknis sedang bekerja untuk
-                                        memperbaikinya.
+                                        Sesi Anda telah berakhir atau halaman
+                                        ini sudah tidak valid. Silakan refresh
+                                        halaman atau kembali ke beranda.
                                     </p>
                                 </div>
+                            </div>
+
+                            {/* Possible Causes */}
+                            <div className="mt-8 rounded-2xl bg-muted/50 p-6">
+                                <h3 className="mb-3 font-semibold text-foreground">
+                                    Kemungkinan penyebab:
+                                </h3>
+                                <ul className="space-y-2 text-sm text-muted-foreground">
+                                    <li className="flex items-start gap-2">
+                                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-yellow-500" />
+                                        <span>
+                                            Halaman terlalu lama tidak
+                                            di-refresh
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-yellow-500" />
+                                        <span>
+                                            Token CSRF tidak valid atau
+                                            kadaluarsa
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-yellow-500" />
+                                        <span>
+                                            Mengirim form yang sudah diproses
+                                            sebelumnya
+                                        </span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-yellow-500" />
+                                        <span>
+                                            Koneksi internet terputus saat
+                                            proses submit
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
 
                             {/* Action Buttons */}
@@ -67,7 +104,7 @@ export default function Error500() {
                                     className="group gap-2 rounded-2xl bg-gradient-primary text-base font-semibold shadow-soft transition-all hover:shadow-float hover:brightness-110"
                                 >
                                     <RefreshCw className="h-5 w-5 transition-transform group-hover:rotate-180" />
-                                    Coba Lagi
+                                    Refresh Halaman
                                 </Button>
 
                                 <Link href={route("dashboard.index")}>
@@ -80,36 +117,27 @@ export default function Error500() {
                                         Kembali ke Beranda
                                     </Button>
                                 </Link>
-                            </div>
 
-                            {/* Report Issue */}
-                            <div className="mt-8 rounded-2xl bg-muted/50 p-6">
-                                <h3 className="mb-3 font-semibold text-foreground">
-                                    Laporkan Masalah?
-                                </h3>
-                                <p className="mb-3 text-sm text-muted-foreground">
-                                    Jika masalah terus berlanjut, silakan
-                                    hubungi admin perpustakaan dengan
-                                    menyertakan:
-                                </p>
-                                <ul className="space-y-1 text-xs text-muted-foreground">
-                                    <li>• Screenshot halaman error</li>
-                                    <li>
-                                        • Langkah-langkah yang dilakukan sebelum
-                                        error muncul
-                                    </li>
-                                    <li>• Waktu kejadian error</li>
-                                </ul>
+                                <Link href={route("login")}>
+                                    <Button
+                                        variant="ghost"
+                                        size="lg"
+                                        className="gap-2 rounded-2xl text-base font-semibold"
+                                    >
+                                        <ArrowLeft className="h-5 w-5" />
+                                        Halaman Login
+                                    </Button>
+                                </Link>
                             </div>
 
                             {/* Help Text */}
                             <p className="mt-6 text-center text-xs text-muted-foreground">
-                                Butuh bantuan cepat?{" "}
+                                Jika masalah berlanjut, silakan{" "}
                                 <a
                                     href="#"
                                     className="font-semibold text-primary hover:underline"
                                 >
-                                    Hubungi admin perpustakaan
+                                    hubungi admin perpustakaan
                                 </a>
                             </p>
                         </motion.div>
