@@ -24,16 +24,14 @@ class PhysicalBookController extends Controller
                     ->orWhere('publisher', 'like', "%{$search}%");
             })
             ->when($request->status === 'available', function ($query) {
-                $query->has('items', '>', 0);
+                $query->has('bookItems', '>', 0);
             })
             ->when($request->status === 'unavailable', function ($query) {
-                $query->doesntHave('items');
+                $query->doesntHave('bookItems');
             })
             ->orderBy($request->sort ?? 'created_at', $request->direction ?? 'desc')
             ->paginate(12)
-            ->withQueryString();
-
-        // dd($books);
+            ->withQueryString();;
 
         $books->through(function ($book) {
             $book->total_items = (int) $book->total_items;
@@ -44,6 +42,8 @@ class PhysicalBookController extends Controller
 
             return $book;
         });
+
+
 
 
         return Inertia::render('Admin/Books/Physical/Index', [

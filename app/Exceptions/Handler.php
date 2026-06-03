@@ -38,26 +38,26 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        $status = $exception instanceof HttpExceptionInterface
-            ? $exception->getStatusCode()
-            : 500;
+        // $status = $exception instanceof HttpExceptionInterface
+        //     ? $exception->getStatusCode()
+        //     : 500;
 
-        if ($request->expectsJson()) {
-            return parent::render($request, $exception);
-        }
+        // if ($request->expectsJson()) {
+        //     return parent::render($request, $exception);
+        // }
 
-        if (in_array($status, [403, 404, 419, 500])) {
-            return Inertia::render("Errors/{$status}", [
-                'status' => $status,
-                'message' => $exception->getMessage() ?: match ($status) {
-                    403 => 'Forbidden',
-                    404 => 'Not Found',
-                    419 => 'Page Expired',
-                    500 => 'Server Error',
-                    default => 'Error',
-                },
-            ])->toResponse($request)->setStatusCode($status);
-        }
+        // if (in_array($status, [403, 404, 419, 500])) {
+        //     return Inertia::render("Errors/{$status}", [
+        //         'status' => $status,
+        //         'message' => $exception->getMessage() ?: match ($status) {
+        //             403 => 'Forbidden',
+        //             404 => 'Not Found',
+        //             419 => 'Page Expired',
+        //             500 => 'Server Error',
+        //             default => 'Error',
+        //         },
+        //     ])->toResponse($request)->setStatusCode($status);
+        // }
 
         return parent::render($request, $exception);
     }

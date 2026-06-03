@@ -138,8 +138,8 @@ export default function PhysicalBooksIndex({ books, filters }: Props) {
         );
     };
 
-    console.log(books.data.map((b) => b.total_items));
-    console.log(typeof books.data[0]?.total_items);
+    // console.log(books.data.map((b) => b.total_items));
+    // console.log(typeof books.data[0]?.total_items);
     return (
         <AdminLayout>
             <div className="mx-auto max-w-7xl px-5 pt-8 lg:px-10 lg:pt-10">
