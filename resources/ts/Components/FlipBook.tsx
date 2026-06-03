@@ -1,4 +1,3 @@
-// resources/js/Components/FlipBook.tsx
 import React, {
     useEffect,
     useRef,
@@ -8,7 +7,6 @@ import React, {
 } from "react";
 import HTMLFlipBook from "react-pageflip";
 import * as pdfjsLib from "pdfjs-dist";
-// import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import {
     ChevronLeft,
     ChevronRight,
@@ -382,40 +380,6 @@ export default function FlipBook({
 
                         <div className="flex items-center gap-2">
                             <Button
-                                onClick={handleZoomOut}
-                                variant="ghost"
-                                size="sm"
-                                className="rounded-xl"
-                                title="Perkecil"
-                            >
-                                <ZoomOut className="h-4 w-4" />
-                            </Button>
-                            <span className="min-w-[60px] text-center text-xs text-muted-foreground">
-                                {Math.round(scale * 100)}%
-                            </span>
-                            <Button
-                                onClick={handleZoomIn}
-                                variant="ghost"
-                                size="sm"
-                                className="rounded-xl"
-                                title="Perbesar"
-                            >
-                                <ZoomIn className="h-4 w-4" />
-                            </Button>
-
-                            <div className="mx-1 hidden h-6 w-px bg-border sm:block" />
-
-                            <Button
-                                onClick={downloadPDF}
-                                variant="ghost"
-                                size="sm"
-                                className="rounded-xl"
-                                title="Download PDF"
-                            >
-                                <Download className="h-4 w-4" />
-                            </Button>
-
-                            <Button
                                 onClick={toggleFullscreen}
                                 variant="ghost"
                                 size="sm"
@@ -438,7 +402,7 @@ export default function FlipBook({
             </div>
 
             {/* FlipBook Container - Responsive */}
-            <div className="flex min-h-[calc(100vh-70px)] items-center justify-center px-2 py-4 sm:px-4 sm:py-8">
+            <div className="flex min-h-[calc(100vh-70px)] items-center justify-center px-2 py-4 sm:px-4 sm:py-8 ">
                 <div className="relative">
                     {/* Shadow effect */}
                     <div className="absolute -inset-2 rounded-2xl bg-gradient-to-r from-muted/20 via-muted/10 to-muted/20 blur-xl sm:-inset-4 sm:rounded-3xl" />
@@ -449,7 +413,7 @@ export default function FlipBook({
                             width={dimensions.width}
                             height={dimensions.height}
                             size="stretch"
-                            minWidth={300}
+                            minWidth={420}
                             maxWidth={isFullscreen ? 1400 : 1000}
                             minHeight={400}
                             maxHeight={isFullscreen ? 1000 : 1200}

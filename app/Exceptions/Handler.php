@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
             return parent::render($request, $exception);
         }
 
-        if (in_array($status, [403, 404, 419, 500])) {
+        if (in_array($status, [403, 404, 419])) {
             return Inertia::render("Errors/{$status}", [
                 'status' => $status,
                 'message' => $exception->getMessage() ?: match ($status) {
