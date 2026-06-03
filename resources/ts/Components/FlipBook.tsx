@@ -320,6 +320,8 @@ export default function FlipBook({
     const dimensions = getBookDimensions();
     const isMobile = windowSize.width < 768;
 
+    console.log(pdfUrl);
+
     if (loading) {
         return (
             <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gradient-to-br from-muted/20 via-background to-muted/20">

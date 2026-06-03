@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Wishlist;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class LibraryController extends Controller
