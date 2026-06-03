@@ -35,6 +35,17 @@ class PhysicalBookController extends Controller
 
         // dd($books);
 
+        $books->through(function ($book) {
+            $book->total_items = (int) $book->total_items;
+            $book->book_items_count = (int) $book->book_items_count;
+
+            // Bonus: cast stock juga jika perlu
+            $book->stock = (int) $book->stock;
+
+            return $book;
+        });
+
+
         return Inertia::render('Admin/Books/Physical/Index', [
             'books' => $books,
             'filters' => $request->only(['search', 'status', 'sort', 'direction']),
