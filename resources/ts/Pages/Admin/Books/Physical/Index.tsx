@@ -138,31 +138,8 @@ export default function PhysicalBooksIndex({ books, filters }: Props) {
         );
     };
 
-    const getStockStatus = (book: PhysicalBook) => {
-        if (book.book_items_count === 0) {
-            return {
-                label: "Tersedia",
-                color: "text-green-600",
-                bg: "bg-green-100",
-                icon: CheckCircle,
-            };
-        }
-        if (book.book_items_count > 0) {
-            return {
-                label: "Habis",
-                color: "text-red-600",
-                bg: "bg-red-100",
-                icon: AlertCircle,
-            };
-        }
-        return {
-            label: "Tersedia",
-            color: "text-green-600",
-            bg: "bg-green-100",
-            icon: CheckCircle,
-        };
-    };
-
+    console.log(books.data.map((b) => b.total_items));
+    console.log(typeof books.data[0]?.total_items);
     return (
         <AdminLayout>
             <div className="mx-auto max-w-7xl px-5 pt-8 lg:px-10 lg:pt-10">
