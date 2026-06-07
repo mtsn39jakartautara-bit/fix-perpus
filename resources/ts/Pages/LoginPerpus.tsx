@@ -1,9 +1,9 @@
 import { Head } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Sparkles, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useForm } from "@inertiajs/react";
 
 export default function Welcome(props: any) {
@@ -12,9 +12,17 @@ export default function Welcome(props: any) {
         password: "",
     });
 
+    // State untuk show/hide password
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         post(route("login")); // Changed from "login.attempt" to "login" (standard Laravel route)
+    };
+
+    // Fungsi toggle show/hide password
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -142,16 +150,37 @@ export default function Welcome(props: any) {
                                     <label className="text-sm font-medium">
                                         Kata sandi
                                     </label>
-                                    <Input
-                                        type="password"
-                                        placeholder="••••••••"
-                                        className="h-14 rounded-2xl border-0 bg-muted px-5 text-base focus-visible:ring-2 focus-visible:ring-primary"
-                                        value={data.password}
-                                        onChange={(e) =>
-                                            setData("password", e.target.value)
-                                        }
-                                        disabled={processing}
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            type={
+                                                showPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+                                            placeholder="••••••••"
+                                            className="h-14 rounded-2xl border-0 bg-muted px-5 text-base focus-visible:ring-2 focus-visible:ring-primary pr-12"
+                                            value={data.password}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "password",
+                                                    e.target.value
+                                                )
+                                            }
+                                            disabled={processing}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={togglePasswordVisibility}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                                            disabled={processing}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-5 w-5" />
+                                            ) : (
+                                                <Eye className="h-5 w-5" />
+                                            )}
+                                        </button>
+                                    </div>
                                     {errors.password && (
                                         <p className="text-xs text-destructive">
                                             {errors.password}
