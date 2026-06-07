@@ -1,9 +1,9 @@
 import { Head } from "@inertiajs/react";
 import { motion } from "framer-motion";
-import { GraduationCap, BookOpen, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
-import { useState, FormEvent } from "react";
+import { FormEvent } from "react";
 import { useForm } from "@inertiajs/react";
 
 export default function Welcome(props: any) {
@@ -17,11 +17,9 @@ export default function Welcome(props: any) {
         post(route("login")); // Changed from "login.attempt" to "login" (standard Laravel route)
     };
 
-    // Demo login untuk development (opsional)
-
     return (
         <>
-            <Head title="E-Perpustakaan MTSN 39 Jakarta Utara" />
+            <Head title="Login" />
 
             <main>
                 <div className="relative h-screen overflow-hidden bg-gradient-hero">
