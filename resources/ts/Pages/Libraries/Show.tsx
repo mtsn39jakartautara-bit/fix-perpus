@@ -6,8 +6,6 @@ import { motion } from "framer-motion";
 import {
     BookOpen,
     Heart,
-    Share2,
-    Download,
     Calendar,
     User,
     Building,
@@ -53,6 +51,10 @@ interface Book {
         total: number;
     };
     user_reaction: string | null;
+
+    user_bookmark: {
+        page_number: number;
+    } | null;
 }
 
 interface Props {
@@ -87,6 +89,8 @@ export default function DigitalBookShow({ book, recommendations }: Props) {
                 bookTitle={book.title}
                 bookId={book.id}
                 onClose={() => setShowReader(false)}
+                initialPage={book.user_bookmark?.page_number || 1}
+                userBookmark={book.user_bookmark}
             />
         );
     }

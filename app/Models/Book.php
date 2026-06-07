@@ -71,6 +71,8 @@ class Book extends Model
         return $this->wishlists()->where('user_id', $userId)->exists();
     }
 
+    // Reactions
+
     public function reactions()
     {
         return $this->hasMany(Reaction::class);
@@ -91,5 +93,16 @@ class Book extends Model
             'sad' => $this->reactions()->where('type', 'sad')->count(),
             'total' => $this->reactions()->count(),
         ];
+    }
+
+    // Bookmark
+    public function userBookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
+    public function userBookmark($userId)
+    {
+        return $this->userBookmarks()->where('user_id', $userId)->first();
     }
 }

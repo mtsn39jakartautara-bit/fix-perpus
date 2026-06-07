@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\UploadStudentController;
 use App\Http\Controllers\Admin\UploadTeacherController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VisitController as AdminVisitController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LibraryController;
@@ -70,7 +71,16 @@ Route::middleware('auth')->group(function () {
         Route::post('/claim/{book}', [ReadingSessionController::class, 'claimReward']);
     });
 
+    //Reaction Book
     Route::post('/books/{book}/reaction', [ReactionController::class, 'toggle'])->name('reaction.toggle');
+
+    // bookmark
+    Route::prefix('books')->name('bookmark.')->group(function () {
+        Route::post('/{book}/bookmark', [BookmarkController::class, 'store'])->name('store');
+        Route::get('/{book}/bookmark', [BookmarkController::class, 'show'])->name('show');
+        Route::delete('/{book}/bookmark', [BookmarkController::class, 'destroy'])->name('destroy');
+    });
+
 
     // visit
     Route::get('/visits', [VisitController::class, 'index'])->name('visits.index');

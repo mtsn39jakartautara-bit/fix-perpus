@@ -1,4 +1,6 @@
 // resources/js/Components/FlipBook.tsx
+// Update file ini dengan menambahkan fitur bookmark
+
 import React, {
     useEffect,
     useRef,
@@ -20,10 +22,14 @@ import {
     Minimize2,
     Clock,
     AlertCircle,
+    Bookmark,
+    BookmarkCheck,
 } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { useReadingTimer } from "@/hooks/useReadingTimer";
 import { Toaster, toast } from "sonner";
+import axios from "axios";
+import { route } from "ziggy-js";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = "/package/pdf.worker.js";
 
@@ -32,6 +38,10 @@ interface FlipBookProps {
     bookTitle: string;
     bookId: number | string;
     onClose?: () => void;
+    initialPage?: number; // Tambahkan prop untuk halaman awal
+    userBookmark?: {
+        page_number: number;
+    } | null;
 }
 
 interface PageData {
@@ -47,8 +57,9 @@ const Page = forwardRef<
         image?: string;
         number: number;
         isCurrent?: boolean;
+        hasBookmark?: boolean;
     }
->(({ image, number }, ref) => {
+>(({ image, number, hasBookmark }, ref) => {
     return (
         <div
             ref={ref}
@@ -70,6 +81,23 @@ const Page = forwardRef<
                         className="h-full w-full object-contain"
                         loading="lazy"
                     />
+
+                    {/* Bookmark indicator on page */}
+                    {hasBookmark && (
+                        <div className="absolute top-0 right-0 z-10">
+                            <div className="relative">
+                                <div
+                                    className="absolute -top-1 right-4 h-12 w-8 bg-yellow-400 shadow-lg rotate-3"
+                                    style={{
+                                        clipPath:
+                                            "polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%)",
+                                    }}
+                                />
+                                <BookmarkCheck className="absolute -top-1 right-5 h-5 w-5 text-yellow-700" />
+                            </div>
+                        </div>
+                    )}
+
                     <div className="absolute bottom-3 right-3 rounded-full bg-background/80 px-2 py-1 text-[11px] font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
                         {number}
                     </div>
@@ -90,7 +118,7 @@ const Page = forwardRef<
 
 Page.displayName = "Page";
 
-// Countdown Modal Component
+// Countdown Modal Component (tetap sama seperti sebelumnya)
 const CountdownModal = ({
     timerState,
     bookTitle,
@@ -99,7 +127,6 @@ const CountdownModal = ({
     isClaiming,
     formatTime,
 }: any) => {
-    // Auto claim when canClaimReward is true
     useEffect(() => {
         if (
             timerState.canClaimReward &&
@@ -202,13 +229,15 @@ export default function FlipBook({
     bookTitle,
     bookId,
     onClose,
+    initialPage = 1,
+    userBookmark,
 }: FlipBookProps) {
     const [loading, setLoading] = useState(true);
     const [pdfDoc, setPdfDoc] = useState<pdfjsLib.PDFDocumentProxy | null>(
         null
     );
     const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(initialPage);
     const [pages, setPages] = useState<Map<number, PageData>>(new Map());
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [scale, setScale] = useState(1.5);
@@ -217,15 +246,19 @@ export default function FlipBook({
         width: typeof window !== "undefined" ? window.innerWidth : 1200,
         height: typeof window !== "undefined" ? window.innerHeight : 800,
     });
+    const [hasBookmark, setHasBookmark] = useState(!!userBookmark);
+    const [isSavingBookmark, setIsSavingBookmark] = useState(false);
+    const [bookmarkedPage, setBookmarkedPage] = useState<number | null>(
+        userBookmark?.page_number || null
+    );
 
     const flipBookRef = useRef<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // HAPUS deklarasi isClaiming di sini, gunakan dari hook saja
     const {
         timerState,
         isLoading,
-        isClaiming, // Ambil dari hook
+        isClaiming,
         startCountdown,
         pauseCountdown,
         claimReward,
@@ -284,6 +317,57 @@ export default function FlipBook({
             !isClaiming
         ) {
             startCountdown();
+        }
+    };
+
+    // Function to save bookmark
+    const saveBookmark = async () => {
+        if (isSavingBookmark) return;
+
+        setIsSavingBookmark(true);
+        try {
+            const url = route("bookmark.store", { book: bookId });
+            const response = await axios.post(url, {
+                page_number: currentPage,
+            });
+
+            if (response.data.success) {
+                setHasBookmark(true);
+                setBookmarkedPage(currentPage);
+                toast.success(`Berhasil menandai halaman ${currentPage}`);
+            }
+        } catch (error) {
+            console.error("Error saving bookmark:", error);
+            toast.error("Gagal menyimpan bookmark");
+        } finally {
+            setIsSavingBookmark(false);
+        }
+    };
+
+    // Function to go to bookmarked page
+    const goToBookmark = () => {
+        if (bookmarkedPage && flipBookRef.current) {
+            // Convert to 0-based index for the flip book
+            flipBookRef.current.pageFlip().flip(bookmarkedPage - 1);
+            toast.success(`Membuka halaman ${bookmarkedPage}`);
+        }
+    };
+
+    // Function to delete bookmark
+    const deleteBookmark = async () => {
+        setIsSavingBookmark(true);
+        try {
+            const url = route("bookmark.destroy", { book: bookId });
+            await axios.delete(url);
+
+            setHasBookmark(false);
+            setBookmarkedPage(null);
+            toast.success("Bookmark berhasil dihapus");
+        } catch (error) {
+            console.error("Error deleting bookmark:", error);
+            toast.error("Gagal menghapus bookmark");
+        } finally {
+            setIsSavingBookmark(false);
         }
     };
 
@@ -528,6 +612,7 @@ export default function FlipBook({
                 key={i}
                 number={i}
                 {...(page?.image && { image: page.image })}
+                hasBookmark={bookmarkedPage === i}
             />
         );
     }
@@ -577,7 +662,47 @@ export default function FlipBook({
                             </div>
 
                             <div className="flex items-center gap-2">
+                                {/* Bookmark Button */}
                                 <Button
+                                    onClick={
+                                        hasBookmark
+                                            ? deleteBookmark
+                                            : saveBookmark
+                                    }
+                                    variant={hasBookmark ? "default" : "ghost"}
+                                    size="sm"
+                                    className="rounded-xl"
+                                    disabled={isSavingBookmark}
+                                    title={
+                                        hasBookmark
+                                            ? "Hapus Bookmark"
+                                            : "Tandai Halaman"
+                                    }
+                                >
+                                    {hasBookmark ? (
+                                        <BookmarkCheck className="h-4 w-4" />
+                                    ) : (
+                                        <Bookmark className="h-4 w-4" />
+                                    )}
+                                </Button>
+
+                                {/* Go to Bookmark Button - Only show if has bookmark */}
+                                {hasBookmark && (
+                                    <Button
+                                        onClick={goToBookmark}
+                                        variant="outline"
+                                        size="sm"
+                                        className="rounded-xl"
+                                        title="Lanjutkan ke halaman yang ditandai"
+                                    >
+                                        <Bookmark className="h-4 w-4 mr-1" />
+                                        <span className="hidden sm:inline">
+                                            Hal. {bookmarkedPage}
+                                        </span>
+                                    </Button>
+                                )}
+
+                                {/* <Button
                                     onClick={handleZoomOut}
                                     variant="ghost"
                                     size="sm"
@@ -603,7 +728,7 @@ export default function FlipBook({
                                     title="Download PDF"
                                 >
                                     <Download className="h-4 w-4" />
-                                </Button>
+                                </Button> */}
                                 <Button
                                     onClick={toggleFullscreen}
                                     variant="ghost"

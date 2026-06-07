@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Bookmark;
 use App\Models\Wishlist;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class LibraryController extends Controller
@@ -66,6 +66,9 @@ class LibraryController extends Controller
         $userReaction = null;
         $reactionsCount = $book->reactionsCount;
 
+        // Cek bookmark user
+        $userBookmark = null;
+
         if ($user) {
             $wishlist = Wishlist::where('user_id', $user->id)
                 ->where('book_id', $book->id)
@@ -77,6 +80,17 @@ class LibraryController extends Controller
             }
 
             $userReaction = $book->userReaction($user->id);
+
+            // Ambil bookmark
+            $bookmark = Bookmark::where('user_id', $user->id)
+                ->where('book_id', $book->id)
+                ->first();
+
+            if ($bookmark) {
+                $userBookmark = [
+                    'page_number' => $bookmark->page_number,
+                ];
+            }
         }
 
         // Rekomendasi buku serupa
@@ -101,14 +115,12 @@ class LibraryController extends Controller
                 'publish_year' => $book->publish_year,
                 'abstract' => $book->abstract,
                 'categories' => $book->categories,
-                // 'pdf_url' => $book->pdf_file
-                //     ? Storage::url($book->pdf_file)
-                //     : null,
                 'pdf_url' => '/storage/' . $book->pdf_file,
                 'is_wishlisted' => $isWishlisted,
                 'wishlist_id' => $wishlistId,
                 'reactions_count' => $reactionsCount,
                 'user_reaction' => $userReaction ? $userReaction->type : null,
+                'user_bookmark' => $userBookmark, // Tambahkan ini
             ],
             'recommendations' => $recommendations,
         ]);
