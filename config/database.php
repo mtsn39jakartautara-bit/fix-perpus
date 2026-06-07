@@ -61,6 +61,8 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::ATTR_EMULATE_PREPARES => false,
                 PDO::ATTR_STRINGIFY_FETCHES => false,
+                PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', true),
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
             ]) : [],
         ],
 

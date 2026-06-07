@@ -31,8 +31,12 @@ return new class extends Migration
             $table->text('abstract')->nullable();
             $table->text('pdf_file')->nullable();
 
+            $table->integer('reading_duration')->default(10); // 10 menit default
+
 
             $table->timestamps();
+
+            $table->index(['id'], 'idx_book_id');
         });
     }
 

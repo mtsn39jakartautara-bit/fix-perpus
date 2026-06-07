@@ -29,7 +29,8 @@ class DatabaseSeeder extends Seeder
             AnnouncementSeeder::class,
             PointPeriodSeeder::class,
             PointHistorySeeder::class,
-            PointPeriodResultSeeder::class,
+            RealisticBookReactionSeeder::class,
+            // PointPeriodResultSeeder::class,
         ]);
     }
 }

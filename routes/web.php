@@ -22,11 +22,12 @@ use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\ReadingSessionController;
 use App\Http\Controllers\TestingController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\WishlistController;
 use App\Models\ClassRoom;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,6 +37,9 @@ use Inertia\Inertia;
 Route::get('/barcode/user', [TestingController::class, 'user']);
 Route::get('/barcode/buku', [TestingController::class, 'buku']);
 Route::get('/barcode/visit', [TestingController::class, 'visit']);
+
+
+Route::get('/today', [TestingController::class, 'today']);
 
 
 Route::post('/testing', [TestingController::class, 'test'])->name('testing');
@@ -59,6 +63,14 @@ Route::middleware('auth')->group(function () {
     // perpus
     Route::get('/perpus', [LibraryController::class, 'index'])->name('perpus.index');
     Route::get('/perpus/{uuid}', [LibraryController::class, 'show'])->name('perpus.show');
+
+    Route::prefix('reading')->group(function () {
+        Route::get('/session/{book}', [ReadingSessionController::class, 'getSession']);
+        Route::put('/session/{book}', [ReadingSessionController::class, 'updateSession']);
+        Route::post('/claim/{book}', [ReadingSessionController::class, 'claimReward']);
+    });
+
+    Route::post('/books/{book}/reaction', [ReactionController::class, 'toggle'])->name('reaction.toggle');
 
     // visit
     Route::get('/visits', [VisitController::class, 'index'])->name('visits.index');

@@ -52,25 +52,31 @@ class LibraryController extends Controller
     }
     public function show($uuid)
     {
-        $book = Book::with('categories')
+        $book = Book::with(['categories', 'reactions'])
             ->where('uuid', $uuid)
             ->firstOrFail();
 
         $user = auth()->user();
 
-        // Cek apakah buku sudah di wishlist dan ambil data wishlistnya
+        // Cek apakah buku sudah di wishlist
         $isWishlisted = false;
         $wishlistId = null;
+
+        // Cek reaction user
+        $userReaction = null;
+        $reactionsCount = $book->reactionsCount;
 
         if ($user) {
             $wishlist = Wishlist::where('user_id', $user->id)
                 ->where('book_id', $book->id)
-                ->first(); // Gunakan first() bukan hanya where()
+                ->first();
 
             if ($wishlist) {
                 $isWishlisted = true;
-                $wishlistId = $wishlist->id; // Ambil ID wishlist untuk keperluan delete
+                $wishlistId = $wishlist->id;
             }
+
+            $userReaction = $book->userReaction($user->id);
         }
 
         // Rekomendasi buku serupa
@@ -85,7 +91,6 @@ class LibraryController extends Controller
             ->limit(4)
             ->get();
 
-
         return Inertia::render('Libraries/Show', [
             'book' => [
                 'id' => $book->id,
@@ -96,14 +101,14 @@ class LibraryController extends Controller
                 'publish_year' => $book->publish_year,
                 'abstract' => $book->abstract,
                 'categories' => $book->categories,
-                // 'pdf_url' => $book->pdf_file
-                //     ? Storage::url($book->pdf_file)
-                //     : null,
-                'pdf_url' => '/storage/' . $book->pdf_file,
+                'pdf_url' => $book->pdf_file
+                    ? Storage::url($book->pdf_file)
+                    : null,
                 'is_wishlisted' => $isWishlisted,
-                'wishlist_id' => $wishlistId, // Kirim wishlist_id ke frontend
+                'wishlist_id' => $wishlistId,
+                'reactions_count' => $reactionsCount,
+                'user_reaction' => $userReaction ? $userReaction->type : null,
             ],
-
             'recommendations' => $recommendations,
         ]);
     }

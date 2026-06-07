@@ -22,6 +22,7 @@ import {
 import FlipBook from "@/Components/FlipBook";
 import AddToWishlistButton from "@/Components/AddToWishlistButton";
 import { Button } from "@/Components/ui/button";
+import ReactionButton from "@/Components/ReactionButton";
 
 interface Category {
     id: number;
@@ -42,6 +43,16 @@ interface Book {
     is_wishlisted: boolean;
     wishlist_id: number | any;
     cover?: string;
+
+    reactions_count: {
+        like: number;
+        love: number;
+        haha: number;
+        angry: number;
+        sad: number;
+        total: number;
+    };
+    user_reaction: string | null;
 }
 
 interface Props {
@@ -57,6 +68,8 @@ const fade = {
 export default function DigitalBookShow({ book, recommendations }: Props) {
     const [showReader, setShowReader] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(book.is_wishlisted);
+    const [reactionsCount, setReactionsCount] = useState(book.reactions_count);
+    const [userReaction, setUserReaction] = useState(book.user_reaction);
 
     const handleWishlistSuccess = () => {
         setIsWishlisted(!isWishlisted);
@@ -72,10 +85,19 @@ export default function DigitalBookShow({ book, recommendations }: Props) {
             <FlipBook
                 pdfUrl={book.pdf_url}
                 bookTitle={book.title}
+                bookId={book.id}
                 onClose={() => setShowReader(false)}
             />
         );
     }
+
+    const handleReactionChange = (
+        newReactionsCount: any,
+        newUserReaction: string | null
+    ) => {
+        setReactionsCount(newReactionsCount);
+        setUserReaction(newUserReaction);
+    };
 
     return (
         <AppShell>
@@ -192,21 +214,12 @@ export default function DigitalBookShow({ book, recommendations }: Props) {
                                     />
                                 </div>
 
-                                {book.pdf_url && (
-                                    <Button
-                                        onClick={() =>
-                                            window.open(
-                                                book.pdf_url || "",
-                                                "_blank"
-                                            )
-                                        }
-                                        variant="outline"
-                                        className="mt-3 w-full gap-2 rounded-xl"
-                                    >
-                                        <Download className="h-4 w-4" />
-                                        Download PDF
-                                    </Button>
-                                )}
+                                <ReactionButton
+                                    bookId={book.id}
+                                    initialReactionsCount={reactionsCount}
+                                    initialUserReaction={userReaction}
+                                    onReactionChange={handleReactionChange}
+                                />
                             </div>
                         </motion.div>
 

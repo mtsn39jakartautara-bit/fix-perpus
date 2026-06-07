@@ -50,13 +50,53 @@ export default function LibraryPage() {
         totalBooks: number;
     }>().props;
 
-    const [searchTerm, setSearchTerm] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    // Ambil parameter dari URL saat initial load
+    const getInitialSearch = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("search") || "";
+    };
+
+    const getInitialCategory = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("category") || "";
+    };
+
+    const [searchTerm, setSearchTerm] = useState(getInitialSearch);
+    const [debouncedSearch, setDebouncedSearch] = useState(getInitialSearch);
     const [isSearching, setIsSearching] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState<string>("");
+    const [selectedCategory, setSelectedCategory] =
+        useState<string>(getInitialCategory);
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
     const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const isUpdatingFromUrl = useRef(false);
+
+    // Sinkronkan state dengan URL saat halaman di-refresh atau navigasi back/forward
+    useEffect(() => {
+        const handlePopState = () => {
+            const searchFromUrl = getInitialSearch();
+            const categoryFromUrl = getInitialCategory();
+
+            isUpdatingFromUrl.current = true;
+
+            if (searchFromUrl !== searchTerm) {
+                setSearchTerm(searchFromUrl);
+                setDebouncedSearch(searchFromUrl);
+            }
+
+            if (categoryFromUrl !== selectedCategory) {
+                setSelectedCategory(categoryFromUrl);
+            }
+
+            setTimeout(() => {
+                isUpdatingFromUrl.current = false;
+            }, 100);
+        };
+
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
+    }, []);
 
     // Debounce search dengan cleanup yang lebih baik
     useEffect(() => {
@@ -78,8 +118,41 @@ export default function LibraryPage() {
         };
     }, [searchTerm]);
 
-    // Trigger search and filter when values change
+    // Trigger search and filter when values change - FIXED INFINITE LOOP
     useEffect(() => {
+        // Cegah update jika sedang sync dari URL
+        if (isUpdatingFromUrl.current) {
+            return;
+        }
+
+        // Cegah infinite loop dengan membandingkan dengan URL saat ini
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSearch = urlParams.get("search") || "";
+        const currentCategory = urlParams.get("category") || "";
+
+        // Jika nilai sudah sama dengan URL, tidak perlu update
+        if (
+            debouncedSearch === currentSearch &&
+            selectedCategory === currentCategory
+        ) {
+            if (isInitialLoad) {
+                setIsInitialLoad(false);
+            }
+            return;
+        }
+
+        // Cegah update ganda saat initial load
+        if (
+            isInitialLoad &&
+            debouncedSearch === "" &&
+            selectedCategory === "" &&
+            currentSearch === "" &&
+            currentCategory === ""
+        ) {
+            setIsInitialLoad(false);
+            return;
+        }
+
         const params: any = { page: 1 };
         if (debouncedSearch) params.search = debouncedSearch;
         if (selectedCategory) params.category = selectedCategory;

@@ -24,6 +24,7 @@ class BookSeeder extends Seeder
                 'publish_year' => 2024,
                 'abstract' => 'Buku ini membahas tentang pemrograman Laravel dari dasar hingga mahir',
                 'pdf_file' => Arr::random($pdf),
+                'reading_duration' => 1
             ],
             [
                 'title' => 'Matematika Diskrit',
@@ -32,6 +33,7 @@ class BookSeeder extends Seeder
                 'publish_year' => 2023,
                 'abstract' => 'Buku matematika diskrit untuk perguruan tinggi',
                 'pdf_file' => Arr::random($pdf),
+                'reading_duration' => 1
             ],
             [
                 'title' => 'Bahasa Inggris untuk Pemula',
@@ -40,6 +42,7 @@ class BookSeeder extends Seeder
                 'publish_year' => 2023,
                 'abstract' => 'Belajar bahasa Inggris dengan mudah dan cepat',
                 'pdf_file' => Arr::random($pdf),
+                'reading_duration' => 1
             ],
             [
                 'title' => 'Fisika Dasar',
@@ -48,6 +51,7 @@ class BookSeeder extends Seeder
                 'publish_year' => 2022,
                 'abstract' => 'Konsep fisika dasar untuk SMA dan mahasiswa',
                 'pdf_file' => Arr::random($pdf),
+                'reading_duration' => 1
             ],
             [
                 'title' => 'Sejarah Indonesia',
@@ -56,6 +60,7 @@ class BookSeeder extends Seeder
                 'publish_year' => 2023,
                 'abstract' => 'Buku sejarah Indonesia lengkap',
                 'pdf_file' => Arr::random($pdf),
+                'reading_duration' => 1
             ],
         ];
 

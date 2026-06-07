@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BookItem;
 use App\Models\LibraryCheckPoint;
 use App\Models\User;
+use Carbon\Carbon;
 use Inertia\Inertia;
 
 class TestingController extends Controller
@@ -25,6 +26,8 @@ class TestingController extends Controller
                     'barcode' => $user->barcode,
                 ];
             });
+
+
 
         return Inertia::render('Test/User', [
             'users' => $users,
@@ -65,6 +68,16 @@ class TestingController extends Controller
 
         return Inertia::render('Test/Visit', [
             'rooms' => $rooms,
+        ]);
+    }
+    public function today()
+    {
+        // kunjungan sisi user
+        $now = Carbon::now();
+
+        dd($now->format('Y-m-d H:i:s'));
+        return Inertia::render('Test/Visit', [
+            'today' => $now,
         ]);
     }
 

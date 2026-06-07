@@ -22,6 +22,7 @@ class Book extends Model
         'publish_year',
         'abstract',
         'pdf_file',
+        'reading_duration'
     ];
     protected static function booted()
     {
@@ -68,5 +69,27 @@ class Book extends Model
     public function isWishlistedBy($userId)
     {
         return $this->wishlists()->where('user_id', $userId)->exists();
+    }
+
+    public function reactions()
+    {
+        return $this->hasMany(Reaction::class);
+    }
+
+    public function userReaction($userId)
+    {
+        return $this->reactions()->where('user_id', $userId)->first();
+    }
+
+    public function getReactionsCountAttribute()
+    {
+        return [
+            'like' => $this->reactions()->where('type', 'like')->count(),
+            'love' => $this->reactions()->where('type', 'love')->count(),
+            'haha' => $this->reactions()->where('type', 'haha')->count(),
+            'angry' => $this->reactions()->where('type', 'angry')->count(),
+            'sad' => $this->reactions()->where('type', 'sad')->count(),
+            'total' => $this->reactions()->count(),
+        ];
     }
 }
