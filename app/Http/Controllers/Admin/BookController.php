@@ -63,10 +63,10 @@ class BookController extends Controller
         $book = new Book();
         $book->uuid = Str::uuid();
         $book->title = $validated['title'];
-        $book->author = $validated['author'];
-        $book->publisher = $validated['publisher'];
-        $book->publish_year = $validated['publish_year'];
-        $book->abstract = $validated['abstract'];
+        $book->author = $validated['author'] ?? null;
+        $book->publisher = $validated['publisher'] ?? null;
+        $book->publish_year = $validated['publish_year'] ?? null;
+        $book->abstract = $validated['abstract'] ?? null;
 
         if ($request->hasFile('pdf_file')) {
             $path = $request->file('pdf_file')->store('books/pdfs', 'public');
