@@ -55,7 +55,7 @@ class BookController extends Controller
             'publisher' => 'nullable|string|max:255',
             'publish_year' => 'nullable|integer|min:1900|max:' . date('Y'),
             'abstract' => 'nullable|string',
-            'pdf_file' => 'nullable|file|mimes:pdf|max:10240', // Max 10MB
+            'pdf_file' => 'nullable|file|mimes:pdf|max:51200', // Max 50MB
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
         ]);
