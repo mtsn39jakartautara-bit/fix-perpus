@@ -1,1 +1,0 @@
-import{j as o}from"./app-cYUneOb2.js";function a({forInput:t,value:e,className:r="",children:m}){return o.jsx("label",{htmlFor:t,className:`block font-medium text-sm text-gray-700 ${r}`,children:e??m})}export{a as I};

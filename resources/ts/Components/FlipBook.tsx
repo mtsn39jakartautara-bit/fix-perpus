@@ -389,7 +389,17 @@ export default function FlipBook({
         const loadPdf = async () => {
             try {
                 setLoading(true);
-                const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+
+                const loadingTask = pdfjsLib.getDocument({
+                    url: pdfUrl,
+                    cMapUrl: "/package/cmaps/",
+                    cMapPacked: true,
+                    standardFontDataUrl: "/package/standard_fonts/",
+                    wasmUrl: "/package/wasm/",
+                });
+
+                const pdf = await loadingTask.promise;
+
                 setPdfDoc(pdf);
                 setTotalPages(pdf.numPages);
             } catch (error) {
