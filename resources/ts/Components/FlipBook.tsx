@@ -440,7 +440,8 @@ export default function FlipBook({
                     viewport,
                 }).promise;
 
-                const image = canvas.toDataURL("image/jpeg", 0.85);
+                // const image = canvas.toDataURL("image/jpeg", 0.85);
+                const image = canvas.toDataURL("image/png");
 
                 setPages((prev) => {
                     if (prev.has(pageNumber)) return prev;
