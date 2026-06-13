@@ -82,7 +82,7 @@ export default function DigitalBookCreate({ categories }: Props) {
             if (file.size > 50 * 1024 * 1024) {
                 setErrors((prev) => ({
                     ...prev,
-                    pdf_file: "Ukuran file maksimal 50MB",
+                    pdf_file: "Ukuran file maksimal 10MB",
                 }));
                 return;
             }

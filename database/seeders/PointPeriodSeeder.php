@@ -20,17 +20,10 @@ class PointPeriodSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+
         PointPeriods::create([
             'name' => 'Periode 1',
             'description' => 'Priode 1',
-            'is_active' => false,
-            'started_at' => Carbon::create(2025, 1, 1),
-            'ended_at' => Carbon::create(2025, 12, 31),
-        ]);
-
-        PointPeriods::create([
-            'name' => 'Periode 2',
-            'description' => 'Priode 2',
             'is_active' => true,
             'started_at' => Carbon::create(2026, 1, 1),
             'ended_at' => null,

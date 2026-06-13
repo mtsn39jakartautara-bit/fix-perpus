@@ -24,10 +24,10 @@ class BookItemSeeder extends Seeder
         }
 
         // Tambah beberapa book item yang statusnya borrowed untuk sample
-        $borrowedItems = BookItem::where('status', 'available')->take(3)->get();
-        foreach ($borrowedItems as $item) {
-            $item->update(['status' => 'borrowed']);
-        }
+        // $borrowedItems = BookItem::where('status', 'available')->take(3)->get();
+        // foreach ($borrowedItems as $item) {
+        //     $item->update(['status' => 'borrowed']);
+        // }
     }
 
     private function generateBarcode(string $identifier): string
